@@ -1,0 +1,31 @@
+yasu@t.gw01> show configuration security |display set
+set security nat source rule-set sNAT from zone To_Service_A
+set security nat source rule-set sNAT to zone untrust
+set security nat source rule-set sNAT rule 99 match source-address 0.0.0.0/0
+set security nat source rule-set sNAT rule 99 then source-nat interface
+set security policies from-zone trust to-zone trust policy PERMIT match source-address any
+set security policies from-zone trust to-zone trust policy PERMIT match destination-address any
+set security policies from-zone trust to-zone trust policy PERMIT match application any
+set security policies from-zone trust to-zone trust policy PERMIT then permit
+set security policies from-zone To_Service_A to-zone untrust policy PERMIT match source-address any
+set security policies from-zone To_Service_A to-zone untrust policy PERMIT match destination-address any
+set security policies from-zone To_Service_A to-zone untrust policy PERMIT match application any
+set security policies from-zone To_Service_A to-zone untrust policy PERMIT then permit
+set security zones security-zone trust host-inbound-traffic system-services all
+set security zones security-zone trust host-inbound-traffic protocols all
+set security zones security-zone trust interfaces ge-0/0/0.0
+set security zones security-zone untrust host-inbound-traffic system-services ping
+set security zones security-zone untrust interfaces ge-0/0/2.0
+set security zones security-zone To_Service_A host-inbound-traffic system-services ping
+set security zones security-zone To_Service_A host-inbound-traffic protocols ospf
+set security zones security-zone To_Service_A interfaces ge-0/0/1.102
+
+yasu@t.gw01> show configuration interfaces |display set
+set interfaces ge-0/0/0 unit 0 family inet dhcp
+set interfaces ge-0/0/1 description To_t.vrf02
+set interfaces ge-0/0/1 vlan-tagging
+set interfaces ge-0/0/1 unit 102 vlan-id 102
+set interfaces ge-0/0/1 unit 102 family inet address 192.168.102.254/24
+set interfaces ge-0/0/2 description To_Internet
+set interfaces ge-0/0/2 unit 0 family inet address 11.11.11.11/24
+set interfaces lo0 unit 0 family inet address 3.3.3.3/32

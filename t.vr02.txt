@@ -1,0 +1,52 @@
+yasu@t.vrf02> show configuration |display set|no-more
+set version 12.1X47-D20.7
+set system host-name t.vrf02
+set system root-authentication encrypted-password "$1$tbefZb8E$g5Z/Ee/VxT/tsjjTqJmHL0"
+set system login user yasu uid 2001
+set system login user yasu class super-user
+set system login user yasu authentication encrypted-password "$1$A7VeiGjs$RmQVssVnI7.MkZSxkXfZl1"
+set system services ssh
+set system services web-management http interface ge-0/0/0.0
+set system syslog user * any emergency
+set system syslog file messages any any
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system license autoupdate url https://ae1.juniper.net/junos/key_retrieval
+set interfaces ge-0/0/0 unit 0 family inet dhcp
+set interfaces ge-0/0/1 description To_t.vrf01
+set interfaces ge-0/0/1 vlan-tagging
+set interfaces ge-0/0/1 unit 101 description To_t.vrf01_Service_A
+set interfaces ge-0/0/1 unit 101 vlan-id 101
+set interfaces ge-0/0/1 unit 101 family inet address 192.168.101.254/24
+set interfaces ge-0/0/1 unit 201 description To_t.vrf01_Service_B
+set interfaces ge-0/0/1 unit 201 vlan-id 201
+set interfaces ge-0/0/1 unit 201 family inet address 192.168.201.254/24
+set interfaces ge-0/0/2 description to_t.gw01
+set interfaces ge-0/0/2 vlan-tagging
+set interfaces ge-0/0/2 unit 102 description To_t.gw_service_a
+set interfaces ge-0/0/2 unit 102 vlan-id 102
+set interfaces ge-0/0/2 unit 102 family inet address 192.168.102.253/24
+set interfaces ge-0/0/3 description to_t.gw02
+set interfaces ge-0/0/3 vlan-tagging
+set interfaces ge-0/0/3 unit 202 description to_t.gw02_service_b
+set interfaces ge-0/0/3 unit 202 vlan-id 202
+set interfaces ge-0/0/3 unit 202 family inet address 192.168.202.253/24
+set interfaces lo0 unit 0 family inet address 2.2.2.2/32
+set routing-options router-id 2.2.2.2
+set security forwarding-options family inet6 mode packet-based
+set security forwarding-options family mpls mode packet-based
+set security forwarding-options family iso mode packet-based
+set routing-instances Service_A_TBL instance-type virtual-router
+set routing-instances Service_A_TBL interface ge-0/0/1.101
+set routing-instances Service_A_TBL interface ge-0/0/2.102
+set routing-instances Service_A_TBL protocols ospf area 0.0.0.0 interface ge-0/0/1.101
+set routing-instances Service_A_TBL protocols ospf area 0.0.0.0 interface ge-0/0/2.102
+set routing-instances Service_B_TBL instance-type virtual-router
+set routing-instances Service_B_TBL interface ge-0/0/1.201
+set routing-instances Service_B_TBL interface ge-0/0/3.202
+set routing-instances Service_B_TBL protocols ospf area 0.0.0.0 interface ge-0/0/1.201
+set routing-instances Service_B_TBL protocols ospf area 0.0.0.0 interface ge-0/0/3.202
+set vlans VLAN101 description Service_A_To_t.vrf01
+set vlans VLAN101 vlan-id 101
+set vlans VLAN201 description Service_B_To_t.vrf01
+set vlans VLAN201 vlan-id 201

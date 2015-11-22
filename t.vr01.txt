@@ -1,0 +1,58 @@
+yasu@t.vrf01> show configuration |display set|no-more
+set version 12.1X47-D20.7
+set system host-name t.vrf01
+set system internet-options gre-path-mtu-discovery
+set system root-authentication encrypted-password "$1$tbefZb8E$g5Z/Ee/VxT/tsjjTqJmHL0"
+set system login user yasu uid 2001
+set system login user yasu class super-user
+set system login user yasu authentication encrypted-password "$1$A7VeiGjs$RmQVssVnI7.MkZSxkXfZl1"
+set system services ssh
+set system services web-management http interface ge-0/0/0.0
+set system syslog user * any emergency
+set system syslog file messages any any
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system license autoupdate url https://ae1.juniper.net/junos/key_retrieval
+set interfaces ge-0/0/0 unit 0 family inet dhcp
+set interfaces ge-0/0/1 description To_Service_EndPoint
+set interfaces ge-0/0/1 vlan-tagging
+set interfaces ge-0/0/1 unit 100 description To_Service_A
+set interfaces ge-0/0/1 unit 100 vlan-id 100
+set interfaces ge-0/0/1 unit 100 family inet address 192.168.100.254/24
+set interfaces ge-0/0/1 unit 200 description To_Service_B
+set interfaces ge-0/0/1 unit 200 vlan-id 200
+set interfaces ge-0/0/1 unit 200 family inet address 192.168.200.254/24
+set interfaces ge-0/0/2 description To_t.vrf02
+set interfaces ge-0/0/2 vlan-tagging
+set interfaces ge-0/0/2 unit 101 description To_t.vrf02_Service_A
+set interfaces ge-0/0/2 unit 101 vlan-id 101
+set interfaces ge-0/0/2 unit 101 family inet address 192.168.101.253/24
+set interfaces ge-0/0/2 unit 201 description To_t.vrf02_Service_B
+set interfaces ge-0/0/2 unit 201 vlan-id 201
+set interfaces ge-0/0/2 unit 201 family inet address 192.168.201.253/24
+set interfaces ge-0/0/2 unit 301 description practice_network_dupulication
+set interfaces ge-0/0/2 unit 301 vlan-id 301
+set interfaces ge-0/0/2 unit 301 family inet address 192.168.201.253/24
+set interfaces lo0 unit 0 family inet address 1.1.1.1/32
+set routing-options router-id 1.1.1.1
+set security forwarding-options family inet6 mode packet-based
+set security forwarding-options family mpls mode packet-based
+set security forwarding-options family iso mode packet-based
+set routing-instances Service_A_TBL instance-type virtual-router
+set routing-instances Service_A_TBL interface ge-0/0/1.100
+set routing-instances Service_A_TBL interface ge-0/0/2.101
+set routing-instances Service_A_TBL protocols ospf area 0.0.0.0 interface ge-0/0/1.100 passive
+set routing-instances Service_A_TBL protocols ospf area 0.0.0.0 interface ge-0/0/2.101
+set routing-instances Service_B_TBL instance-type virtual-router
+set routing-instances Service_B_TBL interface ge-0/0/1.200
+set routing-instances Service_B_TBL interface ge-0/0/2.201
+set routing-instances Service_B_TBL protocols ospf area 0.0.0.0 interface ge-0/0/1.200 passive
+set routing-instances Service_B_TBL protocols ospf area 0.0.0.0 interface ge-0/0/2.201
+set vlans VLAN100 description Service_A_EndPoint
+set vlans VLAN100 vlan-id 100
+set vlans VLAN101 description Service_A_To_t.vrf02
+set vlans VLAN101 vlan-id 101
+set vlans VLAN200 description Service_B_EndPoint
+set vlans VLAN200 vlan-id 200
+set vlans VLAN201 description Service_B_To_t.vrf02
+set vlans VLAN201 vlan-id 201

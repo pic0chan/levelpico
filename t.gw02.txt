@@ -1,0 +1,45 @@
+yasu@t.gw02> show configuration |display set|no-more
+set version 12.1X47-D20.7
+set system host-name t.gw02
+set system root-authentication encrypted-password "$1$tbefZb8E$g5Z/Ee/VxT/tsjjTqJmHL0"
+set system login user yasu uid 2001
+set system login user yasu class super-user
+set system login user yasu authentication encrypted-password "$1$A7VeiGjs$RmQVssVnI7.MkZSxkXfZl1"
+set system services ssh
+set system services web-management http interface ge-0/0/0.0
+set system syslog user * any emergency
+set system syslog file messages any any
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system license autoupdate url https://ae1.juniper.net/junos/key_retrieval
+set interfaces ge-0/0/0 unit 0 family inet dhcp
+set interfaces ge-0/0/1 description To_t.vrf02
+set interfaces ge-0/0/1 vlan-tagging
+set interfaces ge-0/0/1 unit 202 description To_t.vrf02_Service_B
+set interfaces ge-0/0/1 unit 202 vlan-id 202
+set interfaces ge-0/0/1 unit 202 family inet address 192.168.202.254/24
+set interfaces ge-0/0/2 description To_Internet
+set interfaces ge-0/0/2 unit 0 family inet address 11.11.11.12/24
+set interfaces lo0 unit 0 family inet address 4.4.4.4/32
+set routing-options router-id 4.4.4.4
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.202
+set security nat source rule-set sNAT from zone To_Service_B
+set security nat source rule-set sNAT to zone untrust
+set security nat source rule-set sNAT rule 99 match source-address 0.0.0.0/0
+set security nat source rule-set sNAT rule 99 then source-nat interface
+set security policies from-zone trust to-zone trust policy PERMIT match source-address any
+set security policies from-zone trust to-zone trust policy PERMIT match destination-address any
+set security policies from-zone trust to-zone trust policy PERMIT match application any
+set security policies from-zone trust to-zone trust policy PERMIT then permit
+set security policies from-zone To_Service_B to-zone untrust policy PERMIT match source-address any
+set security policies from-zone To_Service_B to-zone untrust policy PERMIT match destination-address any
+set security policies from-zone To_Service_B to-zone untrust policy PERMIT match application any
+set security policies from-zone To_Service_B to-zone untrust policy PERMIT then permit
+set security zones security-zone trust host-inbound-traffic system-services all
+set security zones security-zone trust host-inbound-traffic protocols all
+set security zones security-zone trust interfaces ge-0/0/0.0
+set security zones security-zone untrust host-inbound-traffic system-services ping
+set security zones security-zone untrust interfaces ge-0/0/2.0
+set security zones security-zone To_Service_B host-inbound-traffic system-services ping
+set security zones security-zone To_Service_B host-inbound-traffic protocols ospf
+set security zones security-zone To_Service_B interfaces ge-0/0/1.202
